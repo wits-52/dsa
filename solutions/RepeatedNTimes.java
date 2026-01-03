@@ -3,6 +3,7 @@ package solutions;
 import java.util.HashSet;
 import java.util.Set;
 
+import utils.PerfUtil;
 import utils.TestUtil;
 
 public class RepeatedNTimes {
@@ -39,7 +40,14 @@ public class RepeatedNTimes {
         return -1;
     }
     public int repeatedNTimes(int[] nums) {
-        return solveWithLinearTimeAndConstantMemoryComplexity(nums);
+        return this.solveWithLinearTimeAndConstantMemoryComplexity(nums);
+    }
+    public int repeatedNTimes(int[] nums, boolean useLinearTimeAndMemoryComplexity) {
+        if (useLinearTimeAndMemoryComplexity) {
+            return this.solveWithLinearTimeAndMemoryComplexity(nums);
+        } else {
+            return this.solveWithLinearTimeAndConstantMemoryComplexity(nums);
+        }
     }
     public static void main(String[] args) {
         RepeatedNTimes solution = new RepeatedNTimes();
@@ -49,5 +57,22 @@ public class RepeatedNTimes {
         TestUtil.run("Test Case #3", 5, solution.repeatedNTimes(new int[]{5, 1, 5, 2, 5, 3, 5, 4}));
         TestUtil.run("Test Case #4", 9, solution.repeatedNTimes(new int[]{9, 5, 6, 9}));
         TestUtil.run("Test Case #5", 2, solution.repeatedNTimes(new int[]{2, 6, 2, 1}));
+
+        // with PerfUtil
+        try {
+            int n = 10000;
+            int[] nums = new int[2 * n];
+
+            for (int i = 0; i < n; i++) {
+                nums[i] = i;
+                nums[n + i] = n;
+            }
+            System.out.println("PerfUtil Result using constant memory: ");
+            PerfUtil.run(() -> solution.repeatedNTimes(nums), true);
+            System.out.println("PerfUtil Result using HashSet: ");
+            PerfUtil.run(() -> solution.repeatedNTimes(nums, true), true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
