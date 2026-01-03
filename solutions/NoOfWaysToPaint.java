@@ -1,7 +1,9 @@
 package solutions;
 
 import utils.MatrixUtil;
+import utils.PerfUtil;
 import utils.TestUtil;
+import utils.PerfUtil.PerfResult;
 
 public class NoOfWaysToPaint {
     private final int MOD = 1000000007;
@@ -62,5 +64,15 @@ public class NoOfWaysToPaint {
         TestUtil.run("O(logN)Test case #2", 54, solution.numOfWays(2, true));
         TestUtil.run("O(logN)Test case #3", 246, solution.numOfWays(3, true));
         TestUtil.run("O(logN)Test case #4", 30228214, solution.numOfWays(5000, true));
+
+        try {
+            System.out.println("PerfUtil Result using linear time complexity: ");
+            PerfResult<Integer> r1 = PerfUtil.run(() -> solution.numOfWays(10000), true);
+            System.out.println("PerfUtil Result using Matric exponentiation: ");
+            PerfResult<Integer> r2 = PerfUtil.run(() -> solution.numOfWays(10000, true), true);
+            TestUtil.run("Test #9: n = 10000", r1.result, r2.result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
