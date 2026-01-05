@@ -23,6 +23,16 @@ public final class TestUtil {
             System.out.println(YELLOW + "  received: " + String.valueOf(received) + RESET);
         }
     }
+    public static void run(String name, int[] expected, int[] received) {
+        boolean passed = ArrayUtil.equals(expected, received);
+        if (passed) {
+            System.out.println(GREEN + "[PASS] " + name + RESET);
+        } else {
+            System.out.println(RED + "[FAIL] " + name + RESET);
+            System.out.println(YELLOW + "  expected: " + String.valueOf(expected.toString()) + RESET);
+            System.out.println(YELLOW + "  received: " + String.valueOf(received.toString()) + RESET);
+        }
+    }
 
     /**
      * Convenience overload for boolean conditions.
