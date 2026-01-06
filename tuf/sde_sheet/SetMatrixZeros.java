@@ -3,6 +3,7 @@ package tuf.sde_sheet;
 import java.util.HashSet;
 import java.util.Set;
 
+import utils.PerfUtil;
 import utils.TestUtil;
 
 public class SetMatrixZeros {
@@ -102,5 +103,28 @@ public class SetMatrixZeros {
             new int[][]{{0,0,0,0},{0,4,5,0},{0,3,1,0}},
             matrix
         );
+
+        // Perf test to show O(m+n) memory can reduce time
+
+        int n = 1000;
+        final int[][] mat = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                mat[i][j] = 1;
+            }
+        }
+        mat[500][500] = 0;
+
+        System.out.println("Performace metrices for complete matrix traversal");
+        final SetMatrixZeros sol = new SetMatrixZeros();
+        PerfUtil.run(() -> {
+            sol.setZeroes(mat);
+        }, true);
+
+        System.out.println("Performace metrices for rows and cols with zero only traversal");
+        final SetMatrixZeros solu = new SetMatrixZeros();
+        PerfUtil.run(() -> {
+            solu.setZeroes(mat, true);
+        }, true);
     }
 }
