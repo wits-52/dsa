@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.daily;
 
 public class MagicSquaresInGrid {
     static boolean has3X3GridOneToNineDigits(int[][] grid, int rowOffset, int colOffset) {

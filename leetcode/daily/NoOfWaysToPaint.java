@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.daily;
 
 import utils.MatrixUtil;
 import utils.PerfUtil;
