@@ -36,8 +36,23 @@ public class FindTheDuplicateNumber {
         }
         return -1;
     }
+    private int tortoiseFastSlowPointer(int[] nums) {
+        int slow = nums[0], fast = nums[nums[0]];
+
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        }
+        fast = 0;
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+
+        return slow;
+    }
     public int findDuplicate(int[] nums) {
-        return this.peigonHoleBinarySearch(nums);
+        return this.tortoiseFastSlowPointer(nums);
     }
 
     public static void main(String[] args) {
