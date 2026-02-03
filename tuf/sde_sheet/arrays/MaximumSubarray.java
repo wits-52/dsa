@@ -1,4 +1,4 @@
-package tuf.sde_sheet;
+package tuf.sde_sheet.arrays;
 
 import utils.TestUtil;
 
