@@ -3,6 +3,7 @@ package tuf.sde_sheet.arrays_II;
 import utils.TestUtil;
 
 public class FindTheDuplicateNumber {
+    @SuppressWarnings("unused")
     private int peigonHoleBinarySearch(int[] nums) {
         int end = nums.length - 1, start = 1;
 
@@ -24,6 +25,7 @@ public class FindTheDuplicateNumber {
 
         return start;
     }
+    @SuppressWarnings("unused")
     private int markingArray(int[] nums) {
         for (int i = 0; i < nums.length; i++) {
             int num = Math.abs(nums[i]);
