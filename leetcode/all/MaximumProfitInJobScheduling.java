@@ -14,73 +14,52 @@ public class MaximumProfitInJobScheduling {
             this.profit = profit;
         }
     }
-    private Map<Integer, List<Job>> jobsAtThisTime = new HashMap<>();
-    List<Integer> startTimes;
+    private List<Job> jobs;
 
-    private Integer findNextStartingPoint(int time) {
-        int start = 0, end = startTimes.size() - 1;
+    private Job findNextJob(int time) {
+        int start = 0, end = this.jobs.size() - 1;
 
         while (start < end) {
             int mid = (start + end) / 2;
 
-            if (this.startTimes.get(mid) == time) {
-                return time;
-            }
-
-            if (startTimes.get(mid) < time) {
+            if (this.jobs.get(mid).start < time) {
                 start = mid + 1;
             } else {
                 end = mid;
             }
         }
 
-        if (this.startTimes.get(start) < time) return null;
+        if (this.jobs.get(start).start < time) return null;
 
-        return this.startTimes.get(start);
+        return this.jobs.get(start);
     }
     private void getJobsBySortedStartTime(int[] startTime, int[] endTime, int[] profit) {
-        this.jobsAtThisTime.clear();
+        this.jobs = new ArrayList<>();
 
         for (int i = 0; i < startTime.length; i++) {
-            Job j = new Job(startTime[i], endTime[i], profit[i]);
-
-            this.jobsAtThisTime.computeIfAbsent(startTime[i], k -> new ArrayList<>()).add(j);
+            jobs.add(new Job(startTime[i], endTime[i], profit[i]));
         }
 
-        this.startTimes = new ArrayList<>(this.jobsAtThisTime.keySet());
-        this.startTimes.sort((a, b) -> a - b);
+        this.jobs.sort((a, b) -> a.start - b.start);
     }
     private int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
-        Map<Integer, Integer> maxProfitAtTime = new HashMap<>();
         this.getJobsBySortedStartTime(startTime, endTime, profit);
 
-        for (int i = this.startTimes.size() - 1; i >= 0; i--) {
-            int time = this.startTimes.get(i);
+        for (int i = this.jobs.size() - 1; i >= 0; i--) {
+            Job job = this.jobs.get(i);
 
-            List<Job> jobs = this.jobsAtThisTime.get(time);
+            Job nextJobAfterThisEnds = this.findNextJob(job.end);
 
-            int maxProfit = 0;
-            for (Job job: jobs) {
-                Integer nextStartingTimeAfterThisJob = this.findNextStartingPoint(job.end);
-                Integer nextStartTimeIfNotExecuted = this.findNextStartingPoint(job.start + 1);
-
-                int jobProfit = job.profit, nextJobProfit = 0;
-
-                if (nextStartingTimeAfterThisJob != null) {
-                    jobProfit += maxProfitAtTime.getOrDefault(nextStartingTimeAfterThisJob, 0);
-                }
-                if (nextStartTimeIfNotExecuted != null) {
-                    nextJobProfit += maxProfitAtTime.getOrDefault(nextStartTimeIfNotExecuted, 0);
-                }
-
-                maxProfit = Math.max(maxProfit, Math.max(jobProfit, nextJobProfit));
+            if (nextJobAfterThisEnds != null) {
+                job.profit += nextJobAfterThisEnds.profit;
             }
-
-            maxProfitAtTime.put(time, maxProfit);
+            if (i != this.jobs.size() - 1) {
+                job.profit = Math.max(job.profit, this.jobs.get(i+1).profit);
+            }
 
         }
 
-        return maxProfitAtTime.get(this.startTimes.get(0));
+        return this.jobs.get(0).profit;
     }
 
     public static void main(String[] args) {
