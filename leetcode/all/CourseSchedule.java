@@ -3,56 +3,60 @@ package leetcode.all;
 import java.util.*;
 
 public class CourseSchedule {
-    Map<Integer, Boolean> hasCycle = new HashMap<>();
-
-    public boolean detectCycle(List<List<Integer>> adjList, int node, Set<Integer> inCycle) {
-        if (hasCycle.containsKey(node)) return hasCycle.get(node);
-        if (inCycle.contains(node)) {
-            hasCycle.put(node, true);
-            return true;
-        } else {
-            inCycle.add(node);
+    public boolean findCycle(int[] hasCycle, List<List<Integer>> adjList, int node, Set<Integer> visited) {
+        if (hasCycle[node] != 0) {
+            return hasCycle[node] == 1;
         }
+        if (visited.contains(node)) {
+            hasCycle[node] = 1;
+            return true;
+        }
+        visited.add(node);
 
-        List<Integer> connectedNodes = adjList.get(node);
-
+        List<Integer> nextCourses = adjList.get(node);
         boolean cycleFound = false;
 
-        for (int i = 0; i < connectedNodes.size(); i++) {
-            cycleFound = cycleFound || this.detectCycle(adjList, connectedNodes.get(i), inCycle);
-        }
-        if (!cycleFound) {
-            inCycle.remove(node);
-        }
-        hasCycle.put(node, cycleFound);
+        for (int i = 0; i < nextCourses.size(); i++) {
+            cycleFound = cycleFound || this.findCycle(hasCycle, adjList, nextCourses.get(i), visited);
 
-        return cycleFound;
-    }
-    public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List<List<Integer>> adjList = new ArrayList<>();
-        this.hasCycle.clear();
-
-        for (int i = 0; i <= numCourses; i++) {
-            adjList.add(new ArrayList<>());
-        }
-
-        for (int[] edge: prerequisites) {
-            adjList.get(edge[0]).add(edge[1]);
-        }
-
-        for (int i = 0; i < numCourses; i++) {
-            Set<Integer> inCycle = new HashSet<>();
-
-            if (!hasCycle.containsKey(i)) {
-                boolean cycleFound = this.detectCycle(adjList, i, inCycle);
-
-                if (cycleFound) return false;
+            if (cycleFound) {
+                hasCycle[node] = 1;
+                return true;
             }
         }
 
-        return true;
+        hasCycle[node] = 2;
+        return false;
     }
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        // 0 -> not calculated, 1 -> has cycle, 2 -> no cycle
+        int[] hasCycle = new int[numCourses];
+        Set<Integer> visited = new HashSet<>();
 
+        List<List<Integer>> adjList = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            adjList.add(new ArrayList<>());
+        }
+
+        // completing coursenum unlocks list of courses
+        for (int[] edge: prerequisites) {
+            adjList.get(edge[1]).add(edge[0]);
+        }
+
+        for (int i = 0; i < numCourses; i++) {
+            visited.clear();
+            if (hasCycle[i] == 0) {
+                boolean cycleFound = this.findCycle(hasCycle, adjList, i, visited);
+
+                if (cycleFound) return false;
+            } else if (hasCycle[i] == 1) {
+                return false;
+            }
+        }
+        // no cycle found after visiting all courses
+        return true;
+    
+    }
     public static void main(String[] args) {
         CourseSchedule solution = new CourseSchedule();
 
