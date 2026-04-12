@@ -8,7 +8,7 @@ public class MaximumTwinSumOfALinkedList {
 
         ListNode fast = head.next, slow = head;
 
-        while (fast.next != null) {
+        while (fast!= null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
