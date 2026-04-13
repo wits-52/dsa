@@ -15,7 +15,7 @@ public class BinaryTreeMaximumPathSum {
         this.maxGlobalSum = Math.max(this.maxGlobalSum, sum);
 
         if (leftSum <= 0 && rightSum <= 0) {
-            return 0;
+            return sum;
         }
         sum += Math.max(rightSum, leftSum);
         this.maxGlobalSum = Math.max(this.maxGlobalSum, sum);
