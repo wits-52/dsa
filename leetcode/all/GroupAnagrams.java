@@ -3,7 +3,7 @@ package leetcode.all;
 import java.util.*;
 
 public class GroupAnagrams {
-    private List<List<String>> groupAnagrams(String[] strs) {
+    public List<List<String>> groupAnagrams(String[] strs) {
         Map<String, List<String>> anagramGroups = new HashMap<>();
         for (String s: strs) {
             int[] freq = new int[26];
