@@ -3,15 +3,6 @@ package leetcode.all;
 import utils.TestUtil;
 
 public class LongestSubstringWithAtLeastKRepeatingCharacters {
-    private boolean isStable(int[] freq, int k) {
-        for (int f: freq) {
-            if (f > 0 && f < k) {
-                return false;
-            }
-        }
-
-        return true;
-    }
     public int longestSubstring(String s, int k) {
         int n = s.length();
         if (k < 2) return n;
@@ -29,25 +20,34 @@ public class LongestSubstringWithAtLeastKRepeatingCharacters {
         for (int unique = 1; unique <= maxUnique; unique++) {
             int[] fCount = new int[26];
 
-            int start = 0, end = 0, currUnique = 0;
+            int start = 0, end = 0, currUnique = 0, atleastK = 0;
 
-            while (end < n && start < n) {
-                
+            while (end < n) {
+                char l = s.charAt(start), r = s.charAt(end);
+
                 if (currUnique <= unique) {
-                    if (fCount[s.charAt(end) - 'a'] == 0) {
+                    if (fCount[r - 'a'] == 0) {
                         currUnique++;
                     }
-                    fCount[s.charAt(end) - 'a']++;
+                    fCount[r - 'a']++;
 
-                    if (this.isStable(fCount, k)) {
+                    if (fCount[r - 'a'] == k) {
+                        atleastK++;
+                    }
+
+                    if (currUnique == unique && atleastK == currUnique) {
                         longestStable = Math.max(end - start + 1, longestStable);
                     }
                     end++;
                 } else {
-                    fCount[s.charAt(start) - 'a']--;
-                    if (fCount[s.charAt(start++) - 'a'] == 0) {
+                    fCount[l - 'a']--;
+                    if (fCount[l - 'a'] == k-1) {
+                        atleastK--;
+                    }
+                    if (fCount[l - 'a'] == 0) {
                         currUnique--;
                     }
+                    start++;
                 }
             }
         }
