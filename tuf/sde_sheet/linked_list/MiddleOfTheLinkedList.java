@@ -3,8 +3,8 @@ package tuf.sde_sheet.linked_list;
 import entities.ListNode;
 
 public class MiddleOfTheLinkedList {
-    public ListNode middleNode(ListNode head) {
-        ListNode slow = new ListNode(), fast = new ListNode();
+    public ListNode<Integer> middleNode(ListNode<Integer> head) {
+        ListNode<Integer> slow = new ListNode<>(), fast = new ListNode<>();
 
         slow = head;
         fast = head.next;
